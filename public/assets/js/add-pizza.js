@@ -42,6 +42,7 @@ const handlePizzaSubmit = event => {
   const pizzaName = $pizzaForm.querySelector('#pizza-name').value;
   const createdBy = $pizzaForm.querySelector('#created-by').value;
   const size = $pizzaForm.querySelector('#pizza-size').value;
+  // ...spread turns iterable list returned by .querySelectorAll into an array which can then be mapped
   const toppings = [...$pizzaForm.querySelectorAll('[name=topping]:checked')].map(topping => {
     return topping.value;
   });
@@ -51,6 +52,24 @@ const handlePizzaSubmit = event => {
   }
 
   const formData = { pizzaName, createdBy, size, toppings };
+
+  fetch('/api/pizzas', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json', 
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(postResponse => {
+    alert('Pizza created successfully!');
+    console.log(postResponse);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
 };
 
 $pizzaForm.addEventListener('submit', handlePizzaSubmit);
