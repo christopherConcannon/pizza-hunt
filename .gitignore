@@ -1,3 +1,7 @@
 node_modules
 .env
 .DS_Store
+
+pizza-list-ANNOTATED.js
+
+single-pizza-ANNOTATED.js
