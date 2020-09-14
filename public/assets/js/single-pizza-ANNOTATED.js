@@ -10,8 +10,13 @@ const $newCommentForm = document.querySelector('#new-comment-form');
 let pizzaId;
 
 function getPizza() {
-  // get id of pizza 
+  // get id of pizza -- what is this? 
+  // https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/URLSearchParams
+  // https://www.w3schools.com/jsref/prop_loc_search.asp
+  // https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/get
+  // document.location.search.substring(1) returns the query string, minus the question mark...so 'id=<2358723957957>'.  This gets passed to URLSearchParams constructor which returns an instance that uses its .get() method to return the value of the id param.  That value is then passed as a param to the api route that hits the db to return correct pizza
   const searchParams = new URLSearchParams(document.location.search.substring(1));
+  console.log(searchParams);
   const pizzaId = searchParams.get('id');
 
   // get pizzaInfo
@@ -20,11 +25,13 @@ function getPizza() {
       console.log(response);
       // check for a 4xx or 5xx error from server
       if (!response.ok) {
+        // why using Error constructor here?
         throw new Error({ message: 'Something went wrong!' });
       }
 
       return response.json();
     })
+    // closure or just implicit passing of data
     .then(printPizza)
     .catch(err => {
       console.log(err);
@@ -33,6 +40,7 @@ function getPizza() {
     })
 }
 
+// how does this function get pizzaData as arg if it is not explicitly passed in the calling function above inside getPizza .then() callback?  is that closure or something in the signature of Promise callbacks?  probably not closure because we are receiving parameter here.
 function printPizza(pizzaData) {
   console.log(pizzaData);
 
@@ -40,6 +48,7 @@ function printPizza(pizzaData) {
 
   const { pizzaName, createdBy, createdAt, size, toppings, comments } = pizzaData;
 
+  // populate page elements with db data
   $pizzaName.textContent = pizzaName;
   $createdBy.textContent = createdBy;
   $createdAt.textContent = createdAt;
@@ -48,7 +57,9 @@ function printPizza(pizzaData) {
     .map(topping => `<span class="col-auto m-2 text-center btn">${topping}</span>`)
     .join('');
 
+  // why validate both?
   if (comments && comments.length) {
+    // call printComment for each comment to display
     comments.forEach(printComment);
   } else {
     $commentSection.innerHTML = '<h4 class="bg-dark p-3 rounded">No comments yet!</h4>';
@@ -64,7 +75,7 @@ function printComment(comment) {
       <h5 class="text-dark">${comment.writtenBy} commented on ${comment.createdAt}:</h5>
       <p>${comment.commentBody}</p>
       <div class="bg-dark ml-3 p-2 rounded" >
-        ${
+        ${ /* if there are any replies in array, map over them to return markup via printReply() function*/
           comment.replies && comment.replies.length
             ? `<h5>${comment.replies.length} ${
                 comment.replies.length === 1 ? 'Reply' : 'Replies'
@@ -88,6 +99,7 @@ function printComment(comment) {
   `;
 
   commentDiv.innerHTML = commentContent;
+  // add newest comments on top
   $commentSection.prepend(commentDiv);
 }
 
