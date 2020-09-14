@@ -11,6 +11,8 @@ request.onupgradeneeded = function(event) {
 	db.createObjectStore('new_pizza', { autoIncrement: true });
 };
 
+
+// QUESTION...DOES THIS HAPPEN EVERY TIME A PIZZA IS ADDED OR JUST WHEN OFFLINE?  yes but if no pizza was added while offline, the saveRecord() function will not have been called and there will be nothing in the store to upload
 // upon a successful request
 request.onsuccess = function(event) {
 	// when db is successfully created with its object store (from onupgradeneeded event above) or simply established a connection, save reference to db in global variable
