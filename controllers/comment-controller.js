@@ -1,11 +1,12 @@
 const { Comment, Pizza } = require('../models');
-const { db } = require('../models/Pizza');
+
 
 const commentController = {
 	// add comment to pizza
 	addComment({ params, body }, res) {
 		console.log(body);
-		Comment.create(body)
+    Comment.create(body)
+      // destructure new comment _id to add to pizza comments array
 			.then(({ _id }) => {
 				console.log(_id);
 				return Pizza.findOneAndUpdate(
@@ -44,11 +45,12 @@ const commentController = {
 
 	// remove comment
 	removeComment({ params }, res) {
-		Comment.findOneAndDelete({ _id: params.commentId })
+    Comment.findOneAndDelete({ _id: params.commentId })
 			.then((deletedComment) => {
 				if (!deletedComment) {
 					return res.status(404).json({ message: 'No comment with this id!' });
-				}
+        }
+        // here it is not necessary to destructure comment _id from above returned promise since we already have it in the params
 				return Pizza.findOneAndUpdate(
 					{ _id: params.pizzaId },
 					{ $pull: { comments: params.commentId } },

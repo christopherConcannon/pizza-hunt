@@ -6,6 +6,7 @@ const pizzaController = {
   // get all pizzas
   getAllPizza(req, res) {
     Pizza.find({})
+      // display associated comments
       .populate({
         path: 'comments',
         select: '-__v'
@@ -51,6 +52,7 @@ const pizzaController = {
 
   // update pizza by id
   updatePizza({ params, body }, res) {
+    // mongoose only validates automatically on create so add option here
     Pizza.findOneAndUpdate({ _id: params.id }, body, {new: true, runValidators: true })
       .then(dbPizzaData => {
         if (!dbPizzaData) {

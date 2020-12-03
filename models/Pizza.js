@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const moment = require('moment');
 
+// create Schema
 const PizzaSchema = new Schema(
 	{
 		pizzaName : {
@@ -16,6 +17,7 @@ const PizzaSchema = new Schema(
 		createdAt : {
 			type    : Date,
       default : Date.now,
+      // transform data by default every time it's queried with getter
       get: (createdAtVal) => moment(createdAtVal).format('MMM DD, YYYY [at] hh:mm a')
 		},
 		size      : {
@@ -25,10 +27,13 @@ const PizzaSchema = new Schema(
 			default : 'Large'
 		},
 		toppings  : [],
-		// create association with Comment model
+    // create association with Comment 
+    // comments is a subdocument
 		comments  : [
 			{
-				type : Schema.Types.ObjectId,
+        // expect an id
+        type : Schema.Types.ObjectId,
+        // coming from the Comment model
 				ref  : 'Comment'
 			}
 		]
