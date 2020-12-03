@@ -24,7 +24,7 @@ Visit site [here](https://pizza-hunt-xo.herokuapp.com/)
   * [Questions](#questions)
   
 ## Installation
-Clone project to a directory on your local machine and cd into directory.  Run <$ npm install> to install dependencies.  See package.json for other available scripts.
+Clone project to a directory on your local machine and cd into pizza-hunt directory.  Run <$ npm install> to install dependencies.  See package.json for other available scripts.
 
 ## Usage
 Run <$ npm start> to launch application on localhost development server.  
